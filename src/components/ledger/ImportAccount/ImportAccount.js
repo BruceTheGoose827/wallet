@@ -1,22 +1,15 @@
 // @flow
 import React from 'react';
-import withStyles from 'react-jss';
 import muiThemeable from 'material-ui/styles/muiThemeable';
-import { ButtonGroup } from 'emerald-js-ui';
-import { Page } from '@emeraldplatform/ui';
-import { AddCircle as AddIcon, Back } from '@emeraldplatform/ui-icons';
+import { Button, ButtonGroup } from 'emerald-js-ui';
+import { AddCircle as AddIcon } from 'emerald-js-ui/lib/icons3';
+import DashboardButton from 'components/common/DashboardButton';
 import HDPath from 'components/common/HdPath';
-import { Row, styles as formStyles } from 'elements/Form';
-import Button from 'elements/Button';
-import AddrList from './AddrList';
-import Pager from './Pager';
+import { Form, Row, styles as formStyles } from 'elements/Form';
+import AddrList from './addrlist';
+import Pager from './pager';
 
-const styles2 = {
-  row: {
-    marginLeft: '14.75px',
-    marginRight: '14.75px',
-  },
-};
+import styles from './importAccount.scss';
 
 type Props = {
   onInit: Function,
@@ -36,9 +29,12 @@ class ImportAccount extends React.Component<Props> {
       hdbase, changeBaseHD, muiTheme, selected,
     } = this.props;
     const { onAddSelected, onCancel, onDashboard } = this.props;
-    const { classes } = this.props;
     return (
-      <Page title="Import Ledger hardware account" leftIcon={<Back onClick={onDashboard} />}>
+      <Form
+        caption="Import Ledger hardware account"
+        backButton={<DashboardButton onClick={onDashboard} />}
+        style={{border: `1px solid ${muiTheme.palette.borderColor}`}}
+      >
         <Row>
           <div style={formStyles.left}>
             <div style={formStyles.fieldName}>HD derivation path</div>
@@ -49,10 +45,10 @@ class ImportAccount extends React.Component<Props> {
           </div>
         </Row>
         <Row>
-          <div className={classes.row}><AddrList /></div>
+          <div className={styles.row}><AddrList /></div>
         </Row>
         <Row>
-          <div className={classes.row}>
+          <div className={styles.row}>
             <ButtonGroup>
               <Button
                 label="Add Selected"
@@ -68,9 +64,9 @@ class ImportAccount extends React.Component<Props> {
             </ButtonGroup>
           </div>
         </Row>
-      </Page>
+      </Form>
     );
   }
 }
 
-export default muiThemeable()(withStyles(styles2)(ImportAccount));
+export default muiThemeable()(ImportAccount);

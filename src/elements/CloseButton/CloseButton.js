@@ -1,15 +1,21 @@
 // @flow
 import React from 'react';
-import IconButton from '@material-ui/core/IconButton';
-import { Close as CloseIcon } from '@emeraldplatform/ui-icons';
+import { IconButton } from 'material-ui';
+import { Close as CloseIcon } from 'emerald-js-ui/lib/icons3';
 
-const CloseButton = (props: { onClick: any, className?: string }) => {
+const smallIcon = {
+  width: '15px',
+  height: '15px',
+};
+
+const CloseButton = (props: { onClick: any, className: string }) => {
   return (
     <IconButton
+      iconStyle={ smallIcon }
       className={ props.className }
-      onClick={ props.onClick }
+      onTouchTap={ props.onClick }
       tooltip="Close">
-      <CloseIcon />
+      <CloseIcon/>
     </IconButton>
   );
 };

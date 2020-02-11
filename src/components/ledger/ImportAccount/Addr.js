@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Radio from '@material-ui/core/Radio';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import log from 'electron-log';
 import { TableRowColumn, TableRow } from 'material-ui/Table';
 import { tables } from 'lib/styles';
@@ -40,30 +41,28 @@ const Addr = ({
   const balance = addr.get('value');
 
   return (
-    <TableRow {...otherProps} selectable={false}>
+    <TableRow {...otherProps} selectable={ false }>
       <TableRowColumn style={tables.wideStyle}>
-        <div style={style.addrContainer}>
+        <div style={ style.addrContainer }>
           <div>
-            {address
-              && <Radio
-                checked={selectedValue === address}
-                disabled={!selectable}
-                value={address}
-                onChange={onSelected}
-              />}
+            { address
+                        && <RadioButtonGroup name="addrRadio" valueSelected={ selectedValue } onChange={ onSelected }>
+                          <RadioButton
+                            disabled={ !selectable }
+                            value={ address }
           </div>
           <div>
-            {address && <AccountAddress id={address} />}
+            { address && <AccountAddress id={ address }/> }
           </div>
         </div>
       </TableRowColumn>
-      <TableRowColumn style={tables.mediumStyle}>{addr.get('hdpath')}</TableRowColumn>
+      <TableRowColumn style={tables.mediumStyle}>{ addr.get('hdpath') }</TableRowColumn>
       <TableRowColumn style={tables.mediumStyle}>
         {balance && <AccountBalance
-          symbol="ETC"
-          balance={balance}
-          showFiat={true}
-          withAvatar={false}
+          symbol="WEB"
+          balance={ balance }
+          showFiat={ true }
+          withAvatar={ false }
         />}
       </TableRowColumn>
       <TableRowColumn style={tables.shortStyle}>
@@ -73,10 +72,13 @@ const Addr = ({
   );
 };
 
+Addr.propTypes = {
+};
+
 export default connect(
   (state, ownProps) => {
     const accounts = state.accounts.get('accounts');
-    const { addr } = ownProps;
+    const {addr} = ownProps;
     let alreadyAdded = false;
     try {
       const addrId = (addr.get('address') || '---R').toLowerCase();
@@ -90,10 +92,8 @@ export default connect(
     };
   },
   (dispatch, ownProps) => ({
-    onSelected: (event, checked) => {
-      if (checked) {
-        ownProps.onSelected(event.target.value);
-      }
+    onSelected: (event, value) => {
+      ownProps.onSelected(value);
     },
   })
 )(Addr);

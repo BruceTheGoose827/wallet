@@ -1,8 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { ArrowLeft as ArrowLeftIcon, ArrowRight as ArrowRightIcon } from '@emeraldplatform/ui-icons';
-import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
+import FlatButton from 'material-ui/FlatButton';
+import { ArrowLeft as ArrowLeftIcon, ArrowRight as ArrowRightIcon } from 'emerald-js-ui/lib/icons3';
+import { Row, Col } from 'react-flexbox-grid/lib/index';
 import ledger from 'store/ledger';
 
 const pageSize = 5;
@@ -15,22 +16,26 @@ const Pager = ({ offset, setOffset }) => {
     marginTop: '8px',
   };
   return (
-    <Grid container alignItems="center">
-      <Grid item xs={5} style={{textAlign: 'right'}}>
-        <IconButton disabled={offset - pageSize < 0} onClick={() => setOffset(offset - pageSize)}ssss>
-          <ArrowLeftIcon />
-        </IconButton>
-      </Grid>
-      <Grid item xs={2} style={offsetStyle}>
+    <Row>
+      <Col xs={5} style={{textAlign: 'right'}}>
+        <FlatButton
+          disabled={offset - pageSize < 0}
+          onClick={() => setOffset(offset - pageSize)}
+          icon={<ArrowLeftIcon />}/>
+      </Col>
+      <Col xs={2} style={offsetStyle}>
         {offset}
-      </Grid>
-      <Grid item xs={5}>
-        <IconButton onClick={() => setOffset(offset + pageSize)}>
-          <ArrowRightIcon />
-        </IconButton>
-      </Grid>
-    </Grid>
+      </Col>
+      <Col xs={5}>
+        <FlatButton
+          onClick={() => setOffset(offset + pageSize)}
+          icon={<ArrowRightIcon />}/>
+      </Col>
+    </Row>
   );
+};
+
+Pager.propTypes = {
 };
 
 export default connect(

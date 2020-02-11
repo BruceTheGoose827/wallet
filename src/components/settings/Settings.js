@@ -1,173 +1,150 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import TextField from '@material-ui/core/TextField';
-import { Checkbox, Page } from '@emeraldplatform/ui';
-import MenuItem from '@material-ui/core/MenuItem';
-import { MuiThemeProvider } from '@material-ui/core/styles';
+import { Field, reduxForm } from 'redux-form';
+import { MenuItem } from 'material-ui';
+import muiThemeable from 'material-ui/styles/muiThemeable';
 import { translate } from 'react-i18next';
-import theme from '@emeraldplatform/ui/lib/theme';
-import { Back } from '@emeraldplatform/ui-icons';
 
-import Button from 'elements/Button';
+import { TextField } from 'redux-form-material-ui';
+import { Button, Page } from 'emerald-js-ui';
+// todo: make this 1 import
 import { styles, Row } from 'elements/Form';
+import SelectField from 'elements/Form/SelectField';
+import Checkbox from 'elements/Form/Checkbox';
+
+import { Back } from 'emerald-js-ui/lib/icons3';
+
 import screen from '../../store/wallet/screen';
 import settings from '../../store/wallet/settings';
 import accounts from '../../store/vault/accounts';
+
 import i18n from '../../i18n/i18n';
 
 export class Settings extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showHiddenAccounts: this.props.showHiddenAccounts,
-      currency: this.props.currency,
-      language: this.props.language,
-      numConfirmations: this.props.numConfirmations,
-    };
-  }
-
-  handleShowHiddenChange = (event, isChecked) => {
-    this.setState({
-      showHiddenAccounts: isChecked,
-    });
-  }
-
-  handleCurrencyChange = (event) => {
-    this.setState({
-      currency: event.target.value,
-    });
-  };
-
-  handleLangChange = (event) => {
-    this.setState({
-      language: event.target.value,
-    });
-  };
-
-  handleConfirmsChange = (event) => {
-    this.setState({
-      numConfirmations: event.target.value,
-    });
-  };
-
-  handleSave = () => {
-    if (this.props.onSubmit) {
-      this.props.onSubmit(this.state);
-    }
-  };
-
   render() {
-    const { goBack, t } = this.props;
-    const {
-      showHiddenAccounts, currency, language, numConfirmations,
-    } = this.state;
+    const { goDashboard, handleSubmit, t } = this.props;
     return (
-      <MuiThemeProvider theme={theme}>
-        <Page title="Settings" leftIcon={<Back onClick={goBack} />}>
-          <div>
-            <Row>
-              <div style={styles.left}>
-                <div style={styles.fieldName}>{t('currency')}</div>
+      <Page title="Settings" leftIcon={<Back onClick={goDashboard} />}>
+        <div>
+          <Row>
+            <div style={styles.left}>
+              <div style={ styles.fieldName }>{ t('currency') }</div>
+            </div>
+            <div style={ styles.right }>
+              <Field
+                name="currency"
+                component={ SelectField }
+                underlineShow={ false }
+                fullWidth={ true } >
+                <MenuItem key="eur" value="eur" label="EUR" primaryText="EUR" />
+                <MenuItem key="usd" value="usd" label="USD" primaryText="USD" />
+                <MenuItem key="cny" value="cny" label="CNY" primaryText="CNY" />
+                <MenuItem key="rub" value="rub" label="RUB" primaryText="RUB" />
+                <MenuItem key="krw" value="krw" label="KRW" primaryText="KRW" />
+                <MenuItem key="aud" value="aud" label="AUD" primaryText="AUD" />
+              </Field>
+            </div>
+          </Row>
+          <Row>
+            <div style={styles.left}>
+              <div style={styles.fieldName}>
+                { t('lang') }
               </div>
-              <div style={styles.right}>
-                <TextField
-                  select
-                  fullWidth
-                  value={currency}
-                  onChange={this.handleCurrencyChange}
-                >
-                  <MenuItem key="eur" value="eur">EUR</MenuItem>
-                  <MenuItem key="usd" value="usd">USD</MenuItem>
-                  <MenuItem key="cny" value="cny">CNY</MenuItem>
-                  <MenuItem key="rub" value="rub">RUB</MenuItem>
-                  <MenuItem key="krw" value="krw">KRW</MenuItem>
-                  <MenuItem key="aud" value="aud">AUD</MenuItem>
-                </TextField>
-              </div>
-            </Row>
-            <Row>
-              <div style={styles.left}>
-                <div style={styles.fieldName}>
-                  {t('lang')}
-                </div>
-              </div>
-              <div style={styles.right}>
-                <TextField
-                  select
-                  value={language}
-                  fullWidth
-                  onChange={this.handleLangChange}
-                >
-                  <MenuItem key="en-US" value="en-US" label="English (US)">English (US)</MenuItem>
-                  <MenuItem key="zh-CN" value="zh-CN" label="中文">中文</MenuItem>
-                  <MenuItem key="pt-BR" value="pt-BR" label="Portugese">Portugese</MenuItem>
-                  <MenuItem key="ko-KR" value="ko-KR" label="Korean">Korean</MenuItem>
-                </TextField>
-              </div>
-            </Row>
-            <Row>
-              <div style={styles.left}>
-                <div style={styles.fieldName}>
-                  {t('showHiddenAccounts')}
-                </div>
-              </div>
-              <div style={styles.right}>
-                <Checkbox
-                  checked={showHiddenAccounts}
-                  label="Show accounts you have hidden"
-                  onCheck={this.handleShowHiddenChange}
+            </div>
+            <div style={styles.right}>
+              <Field
+                name="language"
+                component={ SelectField }
+                underlineShow={false}
+                fullWidth={true}>
+                <MenuItem
+                  key="en-US"
+                  value="en-US"
+                  label="English (US)"
+                  primaryText="English (US)"
                 />
-              </div>
-            </Row>
-            <Row>
-              <div style={styles.left}>
-                <div style={styles.fieldName}>
-                  {t('confirmations')}
-                </div>
-              </div>
-              <div style={styles.right}>
-                <TextField
-                  fullWidth
-                  value={numConfirmations}
-                  margin="normal"
-                  type="number"
-                  required
-                  onChange={this.handleConfirmsChange}
-                  // helperText="Number of confirmations for a transaction to be considered successful"
+                <MenuItem
+                  key="zh-CN"
+                  value="zh-CN"
+                  label="中文"
+                  primaryText="中文"
                 />
-              </div>
-            </Row>
-            <Row>
-              <div style={styles.left} />
-              <div style={styles.right}>
-                <Button
-                  primary={true}
-                  label="SAVE"
-                  onClick={this.handleSave}
+                <MenuItem
+                  key="pt-BR"
+                  value="pt-BR"
+                  label="Portugese"
+                  primaryText="Portugese"
                 />
+                <MenuItem
+                  key="ko-KR"
+                  value="ko-KR"
+                  label="Korean"
+                  primaryText="Korean"
+                />
+              </Field>
+            </div>
+          </Row>
+          <Row>
+            <div style={styles.left}>
+              <div style={styles.fieldName}>
+                { t('showHiddenAccounts') }
               </div>
-            </Row>
-          </div>
-        </Page>
-      </MuiThemeProvider>
+            </div>
+            <div style={styles.right}>
+              <Field
+                name="showHiddenAccounts"
+                component={ Checkbox }
+                label="Show accounts you have hidden"
+              />
+            </div>
+          </Row>
+          <Row>
+            <div style={styles.left}>
+              <div style={styles.fieldName}>
+                { t('confirmations') }
+              </div>
+            </div>
+            <div style={styles.right}>
+              <Field
+                name="numConfirmations"
+                type="number"
+                component={ TextField }
+                label="Number of confirmations for a transaction to be considered successful"
+              />
+
+            </div>
+          </Row>
+          <Row>
+            <div style={ styles.left } />
+            <div style={ styles.right }>
+              <Button primary label="SAVE" onClick={ handleSubmit } />
+            </div>
+          </Row>
+        </div>
+      </Page>
     );
   }
 }
 
-const TranslatedSettings = translate('settings')(Settings);
+const SettingsForm = translate('settings')(reduxForm({
+  form: 'settings',
+  fields: ['language', 'currency', 'showHiddenAccounts'],
+})(muiThemeable()(Settings)));
 
 export default connect(
   (state, ownProps) => {
     return {
-      showHiddenAccounts: state.wallet.settings.get('showHiddenAccounts', false),
-      currency: state.wallet.settings.get('localeCurrency', '').toLowerCase(),
-      language: i18n.language,
-      numConfirmations: state.wallet.settings.get('numConfirmations'),
+      initialValues: {
+        language: i18n.language,
+        currency: state.wallet.settings.get('localeCurrency', '').toLowerCase(),
+        showHiddenAccounts: state.wallet.settings.get('showHiddenAccounts', false),
+        numConfirmations: state.wallet.settings.get('numConfirmations'),
+      },
     };
   },
   (dispatch, ownProps) => ({
-    goBack: () => {
-      dispatch(screen.actions.goBack());
+    goDashboard: () => {
+      dispatch(screen.actions.gotoScreen('home'));
     },
 
     onSubmit: (data) => {
@@ -182,4 +159,4 @@ export default connect(
       dispatch(accounts.actions.loadAccountsList());
     },
   })
-)(TranslatedSettings);
+)(SettingsForm);
